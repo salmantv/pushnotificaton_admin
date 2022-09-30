@@ -31,25 +31,16 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-
     requestPermission();
 
     loadFCM();
 
     listenFCM();
 
-    getToken();
-
     FirebaseMessaging.instance.subscribeToTopic("Animal");
   }
 
   void getTokenFromFirestore() async {}
-
-  void saveToken(String token) async {
-    await FirebaseFirestore.instance.collection("UserTokens").doc("User1").set({
-      'token': token,
-    });
-  }
 
   void sendPushMessage(String token, String body, String title) async {
     try {
@@ -76,16 +67,6 @@ class _MainScreenState extends State<MainScreen> {
     } catch (e) {
       print("error push notification");
     }
-  }
-
-  void getToken() async {
-    await FirebaseMessaging.instance.getToken().then((token) {
-      setState(() {
-        mtoken = token;
-      });
-
-      saveToken(token!);
-    });
   }
 
   void requestPermission() async {
