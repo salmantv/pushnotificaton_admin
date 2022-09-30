@@ -1,16 +1,17 @@
 // To parse this JSON data, do
 //
-//     final recipaModel = recipaModelFromJson(jsonString);
+//     final Usermodel = UsermodelFromJson(jsonString);
 
 import 'dart:convert';
 
-RecipaModel recipaModelFromJson(String str) =>
-    RecipaModel.fromJson(json.decode(str));
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-String recipaModelToJson(RecipaModel data) => json.encode(data.toJson());
+// Usermodel UsermodelFromJson(String str) => Usermodel.fromJson(json.decode(str));
 
-class RecipaModel {
-  RecipaModel({
+String UsermodelToJson(Usermodel data) => json.encode(data.toJson());
+
+class Usermodel {
+  Usermodel({
     this.email,
     this.token,
     this.uid,
@@ -20,11 +21,14 @@ class RecipaModel {
   String? token;
   String? uid;
 
-  factory RecipaModel.fromJson(Map<String, dynamic> json) => RecipaModel(
-        email: json["email"] == null ? null : json["email"],
-        token: json["token"] == null ? null : json["token"],
-        uid: json["uid"] == null ? null : json["uid"],
-      );
+  static Usermodel formSnap(DocumentSnapshot snap) {
+    var snapshot = snap.data() as Map<String, dynamic>;
+    return Usermodel(
+      email: snapshot["email"],
+      token: snapshot["token"],
+      uid: snapshot["uid"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "email": email == null ? null : email,
